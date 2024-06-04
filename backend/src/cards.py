@@ -17,7 +17,6 @@ class Card:
     suit : str
         an emoji/symbol of the suit [♣ ♦ ♥ ♠]
     rank : int
-        
 
 
     Methods
@@ -26,7 +25,9 @@ class Card:
         Returns an integer representing the rank
         A = 1, K = 13. A = 14 if aces_high.
     """
-    def __init__(self, value, suit) -> None:
+    def __init__(self, value: str, suit: str) -> None:
+        if value not in VALUES or suit not in SUITS:
+            raise KeyError
         self.value = value
         self.suit = suit
 
