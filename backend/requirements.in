@@ -1,3 +1,9 @@
+pytest
+pytest-testdox
 fastapi
 psycopg[binary]
 SQLAlchemy
+black
+flake8
+safety
+bandit
