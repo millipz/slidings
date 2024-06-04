@@ -1,0 +1,3 @@
+# Slidings
+
+Just a little card game...
