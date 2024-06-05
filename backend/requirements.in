@@ -1,5 +1,6 @@
 pytest
 pytest-testdox
+pytest-cov
 fastapi
 psycopg[binary]
 SQLAlchemy
