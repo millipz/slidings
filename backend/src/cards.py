@@ -3,7 +3,12 @@ from random import shuffle
 
 
 class Card:
-    SUITS = {1: "♣", 2: "♦", 3: "♥", 4: "♠"}
+    SUITS = {
+        1: "♣",
+        2: "♦",
+        3: "♥",
+        4: "♠",
+    }
     RANKS = {
         0: "🤡",
         1: "A",
@@ -29,13 +34,24 @@ class Card:
 
     def __repr__(self) -> str:
         return (
-            f"Card({self.RANKS[self.rank]}{self.SUITS[self.suit]})"
+            f"Card({self.get_rank_char}{self.get_suit_char})"
         )
 
     def get_suit_char(self) -> str:
+        """Returns suit character of card, (♣♦♥♠)
+
+        Returns:
+            str: suit of card as a single char string emoji
+        """
         return self.SUITS[self.suit]
 
     def get_rank_char(self) -> str:
+        """Returns rank character of card, A - K
+
+        Returns:
+            str: rank of card as a single char string,
+                e.g. "K", "5", "J"
+        """
         return self.RANKS[self.rank]
 
     def get_rank(self, aces_high: bool = False) -> int:
