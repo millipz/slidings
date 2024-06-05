@@ -43,14 +43,15 @@ class TestDeck:
 
     def test_single_card_deck_deal_method_returns_card(self):
         one_card_deck = Deck(["A"], ["♦"])
-        assert one_card_deck.deal() == Card("A", "♦")
+        assert one_card_deck.pop() == Card("A", "♦")
         assert len(one_card_deck) == 0
 
-    def test_empty_deck_returns_none_on_deal(slef):
+    def test_empty_deck_raises_index_error_on_deal(slef):
         one_card_deck = Deck(["A"], ["♦"])
-        one_card_deck.deal()
+        one_card_deck.pop()
         assert len(one_card_deck) == 0
-        assert one_card_deck.deal() is None
+        with pytest.raises(IndexError):
+            one_card_deck.pop()
 
     def test_default_creation_of_52_card_deck(self):
         full_deck = Deck()
@@ -71,40 +72,43 @@ class TestDeck:
     def test_adding_to_top_of_deck(self):
         test_deck = Deck()
         card_to_add = Card("4", "♣")
-        test_deck.add_card(card_to_add)
+        test_deck.append(card_to_add)
         assert len(test_deck) == 53
-        assert test_deck.deal() == Card("4", "♣")
+        assert test_deck.pop() == Card("4", "♣")
 
     def test_adding_and_dealing_from_top_and_bottom(self):
         test_deck = Deck(["5"], ["♦"])
         assert len(test_deck) == 1
-        test_deck.add_card(Card("4", "♣"))
+        test_deck.append(Card("4", "♣"))
         assert len(test_deck) == 2
-        test_deck.add_card(Card("2", "♥"), to_bottom=True)
+        test_deck.appendleft(Card("2", "♥"))
         assert len(test_deck) == 3
-        assert test_deck.deal() == Card("4", "♣")
-        assert test_deck.deal(from_bottom=True) == Card("2", "♥")
+        assert test_deck.pop() == Card("4", "♣")
+        assert test_deck.popleft() == Card("2", "♥")
 
-    def test_adding_multiple_card_objects_using_method(self):
+    def test_adding_multiple_card_objects_using_extend_method(self):
         cards = [Card(v, s) for v, s in [("4", "♣"), ("2", "♥"), ("5", "♦")]]
-        three_cards = Deck([]).add_cards(cards)
-        print(Deck)
+        three_cards = Deck([])
+        three_cards.extend(cards)
         assert len(three_cards) == 3
 
     def test_deck_iteration(self):
         cards = [Card(v, s) for v, s in [("4", "♣"), ("2", "♥"), ("5", "♦")]]
         print(cards)
-        three_cards = Deck(cards)
+        three_cards = Deck([])
+        three_cards.extend(cards)
         iterator = iter(three_cards)
-        assert next(iterator) == Card("5", "♦")
-        assert next(iterator) == Card("2", "♥")
         assert next(iterator) == Card("4", "♣")
+        assert next(iterator) == Card("2", "♥")
+        assert next(iterator) == Card("5", "♦")
         with pytest.raises(StopIteration):
             next(iterator)
 
     def test_adding_decks(self):
-        four_of_clubs = Deck().add_card(Card("4", "♣"))
-        two_of_hearts = Deck().add_card(Card("2", "♥"))
+        four_of_clubs = Deck([])
+        four_of_clubs.append(Card("4", "♣"))
+        two_of_hearts = Deck([])
+        two_of_hearts.append(Card("2", "♥"))
         two_cards = four_of_clubs + two_of_hearts
         assert len(two_cards) == 2
         assert all(
