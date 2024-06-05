@@ -8,6 +8,7 @@
     "build": "vite build",
     "preview": "vite preview"
   },
+  "start": "node ./bin/www",
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^3.0.2",
     "svelte": "^4.2.12",
