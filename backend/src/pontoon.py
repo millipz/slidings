@@ -24,33 +24,32 @@ def start_game():
 def hit(game_id: GameID):
     game = games.get(game_id.game_id)
     if not game:
-        raise HTTPException(status_code=404, detail="Invalid game_id")
+        raise HTTPException(
+            status_code=404, detail="Invalid game_id"
+        )
 
     result = game.player_hit()
-    return {
-        "result": result,
-        "game_state": game.get_game_state()
-    }
+    return {"result": result, "game_state": game.get_game_state()}
 
 
 @app.post("/stand")
 def stand(game_id: GameID):
     game = games.get(game_id.game_id)
     if not game:
-        raise HTTPException(status_code=404, detail="Invalid game_id")
+        raise HTTPException(
+            status_code=404, detail="Invalid game_id"
+        )
 
     result = game.player_stick()
-    return {
-        "result": result,
-        "game_state": game.get_game_state()
-    }
+    return {"result": result, "game_state": game.get_game_state()}
 
 
 @app.get("/state")
 def state(game_id: str):
     game = games.get(game_id)
     if not game:
-        raise HTTPException(status_code=404, detail="Invalid game_id")
+        raise HTTPException(
+            status_code=404, detail="Invalid game_id"
+        )
 
     return game.get_game_state()
-

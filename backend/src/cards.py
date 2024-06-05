@@ -1,9 +1,25 @@
 from collections import deque
 from random import shuffle
 
+
 class Card:
     SUITS = {1: "♣", 2: "♦", 3: "♥", 4: "♠"}
-    RANKS = {0: "🤡", 1: "A", 2: "2", 3: "3", 4: "4", 5: "5", 6: "6", 7: "7", 8: "8", 9: "9", 10: "10", 11: "J", 12: "Q", 13: "K"}
+    RANKS = {
+        0: "🤡",
+        1: "A",
+        2: "2",
+        3: "3",
+        4: "4",
+        5: "5",
+        6: "6",
+        7: "7",
+        8: "8",
+        9: "9",
+        10: "10",
+        11: "J",
+        12: "Q",
+        13: "K",
+    }
 
     def __init__(self, rank: int, suit: int) -> None:
         if rank not in range(0, 14) or suit not in range(1, 5):
@@ -12,7 +28,9 @@ class Card:
         self.suit = suit
 
     def __repr__(self) -> str:
-        return f"Card({self.RANKS[self.rank]}{self.SUITS[self.suit]})"
+        return (
+            f"Card({self.RANKS[self.rank]}{self.SUITS[self.suit]})"
+        )
 
     def get_suit_char(self) -> str:
         return self.SUITS[self.suit]
@@ -43,8 +61,15 @@ class Card:
 
 
 class Deck(deque):
-    def __init__(self, ranks=range(1, 14), suits=range(1, 5), repeats=1) -> None:
-        cards = [Card(rank, suit) for rank in ranks for suit in suits for _ in range(repeats)]
+    def __init__(
+        self, ranks=range(1, 14), suits=range(1, 5), repeats=1
+    ) -> None:
+        cards = [
+            Card(rank, suit)
+            for rank in ranks
+            for suit in suits
+            for _ in range(repeats)
+        ]
         deque.__init__(self, cards)
 
     def shuffle(self) -> None:
@@ -55,7 +80,7 @@ class Deck(deque):
         return f"Deck({len(self)})"
 
     def __str__(self):
-        return f'Card deck of size {len(self)})'
+        return f"Card deck of size {len(self)})"
 
     def __iadd__(self, other):
         """Add cards from another deck to this deck

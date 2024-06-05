@@ -3,6 +3,7 @@ from src.pontoon import app, games
 
 client = TestClient(app)
 
+
 def test_start_game():
     response = client.post("/start")
     assert response.status_code == 200
@@ -17,6 +18,7 @@ def test_start_game():
     assert not game_state["game_over"]
 
     assert game_id in games
+
 
 def test_hit():
     # Start a new game
@@ -52,7 +54,8 @@ def test_stand():
     assert "game_state" in data
 
     game_state = data["game_state"]
-    assert game_state["game_over"] == True
+    assert game_state["game_over"]
+
 
 def test_state():
     # Start a new game
@@ -67,14 +70,19 @@ def test_state():
     assert "dealer_hand" in data
     assert "game_over" in data
 
+
 def test_invalid_game_id():
     # Test with an invalid game_id
     invalid_game_id = "invalid_id"
-    hit_response = client.post("/hit", json={"game_id": invalid_game_id})
+    hit_response = client.post(
+        "/hit", json={"game_id": invalid_game_id}
+    )
     assert hit_response.status_code == 404
     assert hit_response.json()["detail"] == "Invalid game_id"
 
-    stand_response = client.post("/stand", json={"game_id": invalid_game_id})
+    stand_response = client.post(
+        "/stand", json={"game_id": invalid_game_id}
+    )
     assert stand_response.status_code == 404
     assert stand_response.json()["detail"] == "Invalid game_id"
 

@@ -1,5 +1,6 @@
 from src.cards import Deck
 
+
 class GameOverException(Exception):
     pass
 
@@ -46,12 +47,19 @@ class Pontoon:
 
     def player_hit(self):
         if self.player_stuck or self.game_over:
-            return {"status": "error", "message": "Game over or player has already stood."}
+            return {
+                "status": "error",
+                "message": "Game over or player has already stood.",
+            }
 
         self.hit(self.player_hand)
         if self.is_busted(self.player_hand):
             self.game_over = True
-            return {"status": "busted", "message": "Player busted!", "hand": self.player_hand}
+            return {
+                "status": "busted",
+                "message": "Player busted!",
+                "hand": self.player_hand,
+            }
         return {"status": "success", "hand": self.player_hand}
 
     def player_stick(self):
@@ -80,22 +88,38 @@ class Pontoon:
         }
 
         if player_value > 21:
-            result.update({"status": "loss", "message": "Dealer wins!"})
+            result.update(
+                {"status": "loss", "message": "Dealer wins!"}
+            )
         elif dealer_value > 21 or player_value > dealer_value:
-            result.update({"status": "win", "message": "Player wins!"})
+            result.update(
+                {"status": "win", "message": "Player wins!"}
+            )
         elif player_value < dealer_value:
-            result.update({"status": "loss", "message": "Dealer wins!"})
+            result.update(
+                {"status": "loss", "message": "Dealer wins!"}
+            )
         else:
-            result.update({"status": "tie", "message": "It's a tie!"})
+            result.update(
+                {"status": "tie", "message": "It's a tie!"}
+            )
 
         return result
 
     def get_game_state(self):
         return {
             "player_hand": self.player_hand,
-            "dealer_hand": self.dealer_hand if self.game_over else [self.dealer_hand[0], "Hidden"],
+            "dealer_hand": (
+                self.dealer_hand
+                if self.game_over
+                else [self.dealer_hand[0], "Hidden"]
+            ),
             "player_value": self.get_hand_value(self.player_hand),
-            "dealer_value": self.get_hand_value(self.dealer_hand) if self.game_over else "Hidden",
+            "dealer_value": (
+                self.get_hand_value(self.dealer_hand)
+                if self.game_over
+                else "Hidden"
+            ),
             "game_over": self.game_over,
-            "player_stuck": self.player_stuck
+            "player_stuck": self.player_stuck,
         }

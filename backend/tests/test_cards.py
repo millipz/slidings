@@ -12,8 +12,8 @@ class TestCardClass:
     def test_card_created_with_suit_and_value(self):
         ace_of_spades = Card(1, 4)
         assert (
-            ace_of_spades.get_suit_char() == "♠" and
-            ace_of_spades.get_rank_char() == "A"
+            ace_of_spades.get_suit_char() == "♠"
+            and ace_of_spades.get_rank_char() == "A"
         )
 
     def test_integer_rank_available(self):
@@ -21,17 +21,15 @@ class TestCardClass:
         ace_of_diamonds = Card(1, 2)
         king_of_clubs = Card(13, 1)
         assert (
-            four_of_hearts.get_rank() == 4 and
-            ace_of_diamonds.get_rank() == 1 and
-            king_of_clubs.get_rank() == 13
+            four_of_hearts.get_rank() == 4
+            and ace_of_diamonds.get_rank() == 1
+            and king_of_clubs.get_rank() == 13
         )
 
     def test_integer_rank_returns_14_for_aces_high(self):
         ace_of_diamonds = Card(1, 2)
-        assert (
-            ace_of_diamonds.get_rank(aces_high=True) == 14
-        )
-  
+        assert ace_of_diamonds.get_rank(aces_high=True) == 14
+
     def test_alike_cards_are_equal(self):
         assert Card(1, 2) == Card(1, 2)
 
@@ -59,16 +57,15 @@ class TestDeck:
 
     def test_all_cards_in_default_52_card_deck(self):
         full_deck = Deck()
-        card_list = [
-            (card.rank, card.suit)
-            for card in full_deck
+        card_list = [(card.rank, card.suit) for card in full_deck]
+        assert all(
+            [
+                (v, s) in card_list
+                for v in range(1, 14)
+                for s in range(1, 5)
             ]
-        assert all([
-            (v, s) in card_list
-            for v in range(1, 14)
-            for s in range(1, 5)
-            ])
-    
+        )
+
     def test_adding_to_top_of_deck(self):
         test_deck = Deck()
         card_to_add = Card(4, 1)
@@ -115,10 +112,11 @@ class TestDeck:
         two_cards = four_of_clubs + two_of_hearts
         assert len(two_cards) == 2
         assert all(
-                [
-                    card in two_cards for card in [
-                        Card(4, 1),
-                        Card(2, 3),
-                    ]
+            [
+                card in two_cards
+                for card in [
+                    Card(4, 1),
+                    Card(2, 3),
                 ]
-            )
+            ]
+        )
