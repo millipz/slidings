@@ -95,4 +95,4 @@ run-checks: security-test run-black run-flake8 unit-test check-coverage
 # Run Code
 
 run:
-	$(call execute_in_env, PYTHONPATH=${PYTHONPATH} python src/main.py)
+	$(call execute_in_env, PYTHONPATH=${PYTHONPATH} uvicorn src.pontoon:app --host 0.0.0.0 --port 8000 --reload)

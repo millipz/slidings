@@ -41,15 +41,15 @@ def test_hit():
         assert game_over
 
 
-def test_stand():
+def test_stick():
     # Start a new game
     start_response = client.post("/start")
     game_id = start_response.json()["game_id"]
 
-    # Test standing
-    stand_response = client.post("/stand", json={"game_id": game_id})
-    assert stand_response.status_code == 200
-    data = stand_response.json()
+    # Test sticking
+    stick_response = client.post("/stick", json={"game_id": game_id})
+    assert stick_response.status_code == 200
+    data = stick_response.json()
     assert "result" in data
     assert "game_state" in data
 
@@ -80,11 +80,11 @@ def test_invalid_game_id():
     assert hit_response.status_code == 404
     assert hit_response.json()["detail"] == "Invalid game_id"
 
-    stand_response = client.post(
-        "/stand", json={"game_id": invalid_game_id}
+    stick_response = client.post(
+        "/stick", json={"game_id": invalid_game_id}
     )
-    assert stand_response.status_code == 404
-    assert stand_response.json()["detail"] == "Invalid game_id"
+    assert stick_response.status_code == 404
+    assert stick_response.json()["detail"] == "Invalid game_id"
 
     state_response = client.get(f"/state?game_id={invalid_game_id}")
     assert state_response.status_code == 404
