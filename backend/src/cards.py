@@ -1,121 +1,55 @@
 from collections import deque
-
-SUITS: list[str] = tuple(
-    "♣ ♦ ♥ ♠".split()
-    )
-VALUES: list[str] = tuple(
-    "A 2 3 4 5 6 7 8 9 10 J Q K".split()
-    )
-VALID_SUITS: list[str] = tuple(
-    "♣ ♦ ♥ ♠ 🤡".split()
-    )
-VALID_VALUES: list[str] = tuple(
-    "A 2 3 4 5 6 7 8 9 10 J Q K 🤡".split()
-    )
-
+from random import shuffle
 
 class Card:
-    """
-    A basic playing card class
+    SUITS = {1: "♣", 2: "♦", 3: "♥", 4: "♠"}
+    RANKS = {0: "🤡", 1: "A", 2: "2", 3: "3", 4: "4", 5: "5", 6: "6", 7: "7", 8: "8", 9: "9", 10: "10", 11: "J", 12: "Q", 13: "K"}
 
-    ...
-
-    Attributes
-    ----------
-    value : str
-        a character representing the value from A-K
-    suit : str
-        an emoji/symbol of the suit [♣ ♦ ♥ ♠]
-    rank : int
-
-
-    Methods
-    -------
-    get_rank(aces_high = False)
-        Returns an integer representing the rank
-        A = 1, K = 13. A = 14 if aces_high.
-    """
-    def __init__(self, value: str, suit: str) -> None:
-        if (
-            value not in VALID_VALUES
-            or suit not in VALID_SUITS
-        ):
-            raise KeyError
-        self.value = value
+    def __init__(self, rank: int, suit: int) -> None:
+        if rank not in range(0, 14) or suit not in range(1, 5):
+            raise ValueError("Invalid rank or suit")
+        self.rank = rank
         self.suit = suit
 
     def __repr__(self) -> str:
-        return f"Card({self.value}{self.suit})"
+        return f"Card({self.RANKS[self.rank]}{self.SUITS[self.suit]})"
+
+    def get_suit_char(self) -> str:
+        return self.SUITS[self.suit]
+
+    def get_rank_char(self) -> str:
+        return self.RANKS[self.rank]
 
     def get_rank(self, aces_high: bool = False) -> int:
-        """Returns rank of card, 0 - 14
+        """Returns rank of card, 1 - 13
 
         Args:
             aces_high (bool, optional): sets rank
                 for A to 14 if true. Defaults to False.
 
         Returns:
-            int: rank of card from 0 to 14,
-            joker is 0, high ace is 14
+            int: rank of card from 1 to 13,
+            high ace is 14
         """
-        try:
-            return int(self.value)
-        except ValueError:
-            match self.value:
-                case "🤡":
-                    return 0
-                case "J":
-                    return 11
-                case "Q":
-                    return 12
-                case "K":
-                    return 13
-                case "A":
-                    return 14 if aces_high else 1
-                
+        rank = self.rank
+        if rank == 1 and aces_high:
+            rank = 14
+        return rank
+
     def __eq__(self, other):
         if not isinstance(other, Card):
             return False
-        return self.suit == other.suit and self.value == other.value
+        return self.suit == other.suit and self.rank == other.rank
 
 
 class Deck(deque):
-    """
-    A basic playing card deck class
-    (can also be used as a hand)
+    def __init__(self, ranks=range(1, 14), suits=range(1, 5), repeats=1) -> None:
+        cards = [Card(rank, suit) for rank in ranks for suit in suits for _ in range(repeats)]
+        deque.__init__(self, cards)
 
-    ...
-
-    Attributes
-    ----------
-    ranks : list[int]
-        a list of the ranks in the deck
-        A - K
-    suits : list[str]
-        a list of the suits in the deck
-        defaults to ["♣", "♦", "♥", "♠"]
-
-    Methods
-    -------
-    get_rank(aces_high = False)
-        Returns an integer representing the rank
-        A = 1, K = 13. A = 14 if aces_high.
-    """
-    def __init__(
-        self,
-        values: list[str] = VALUES,
-        suits: list[str] = SUITS,
-        repeats=1
-    ) -> None:
-        return deque.__init__(
-            self,
-            [
-                Card(value, suit)
-                for value in values
-                for suit in suits
-                for _ in range(repeats)
-            ],
-        )
+    def shuffle(self) -> None:
+        """Shuffle the Deck in place"""
+        shuffle(self)
 
     def __repr__(self) -> str:
         return f"Deck({len(self)})"
@@ -133,7 +67,7 @@ class Deck(deque):
             Deck: the updated deck
         """
         self.__add__(other)
-    
+
     def __add__(self, other):
         """Add cards from another deck to a new deck
 
@@ -145,5 +79,7 @@ class Deck(deque):
         """
         if not isinstance(other, Deck):
             raise TypeError("Can only add Deck instances to a Deck")
-        self.extend(other)
-        return self
+        new_deck = Deck([])
+        new_deck.extend(self)
+        new_deck.extend(other)
+        return new_deck
