@@ -33,9 +33,9 @@ class Card:
         self.suit = suit
 
     def __repr__(self) -> str:
-        return (
-            f"Card({self.get_rank_char}{self.get_suit_char})"
-        )
+        rank_str = self.RANKS.get(self.rank, str(self.rank))
+        suit_str = self.SUITS.get(self.suit, str(self.suit))
+        return f"Card({rank_str}{suit_str})"
 
     def get_suit_char(self) -> str:
         """Returns suit character of card, (♣♦♥♠)
