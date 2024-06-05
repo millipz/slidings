@@ -6,6 +6,12 @@ SUITS: list[str] = tuple(
 VALUES: list[str] = tuple(
     "A 2 3 4 5 6 7 8 9 10 J Q K".split()
     )
+VALID_SUITS: list[str] = tuple(
+    "♣ ♦ ♥ ♠ 🤡".split()
+    )
+VALID_VALUES: list[str] = tuple(
+    "A 2 3 4 5 6 7 8 9 10 J Q K 🤡".split()
+    )
 
 
 class Card:
@@ -30,7 +36,10 @@ class Card:
         A = 1, K = 13. A = 14 if aces_high.
     """
     def __init__(self, value: str, suit: str) -> None:
-        if value not in VALUES or suit not in SUITS:
+        if (
+            value not in VALID_VALUES
+            or suit not in VALID_SUITS
+        ):
             raise KeyError
         self.value = value
         self.suit = suit
@@ -74,6 +83,7 @@ class Card:
 class Deck:
     """
     A basic playing card deck class
+    (can also be used as a hand)
 
     ...
 
@@ -107,7 +117,7 @@ class Deck:
             ]
         )
 
-    def add(self, card: Card, to_bottom: bool = False):
+    def add_card(self, card: Card, to_bottom: bool = False):
         """Add a card to the deck
 
         Args:
@@ -123,6 +133,23 @@ class Deck:
         else:
             self._cards.appendleft(card)
     
+    def add_cards(self, cards: list[Card], to_bottom: bool = False):
+        """Add list of cards to the deck
+
+        Args:
+            cards (list[Card]): cards to add
+            to_bottom (bool): add to bottom of deck
+                defaults to False
+
+        Returns:
+            None
+        """
+        if not to_bottom:
+            self._cards.extend(cards)
+        else:
+            self._cards.extendleft(cards)
+        return self
+
     def deal(self, from_bottom: bool = False) -> Card:
         """Deal a card from the top of the deck
 
@@ -141,6 +168,21 @@ class Deck:
                 return self._cards.popleft()
         except IndexError:
             return None
+        
+    def __iadd__(self, other):
+        """Add card(s) to the deck using the += operator
+
+        Args:
+            other (Card or list[Card]): card(s) to add
+
+        Returns:
+            Deck: the updated deck
+        """
+        if isinstance(other, Card):
+            self._cards.append(other)
+        else:
+            self._cards.extend(other)
+        return self
 
     def __len__(self):
         return len(self._cards)

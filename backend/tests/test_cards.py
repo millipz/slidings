@@ -71,16 +71,47 @@ class TestDeck:
     def test_adding_to_top_of_deck(self):
         test_deck = Deck()
         card_to_add = Card("4", "♣")
-        test_deck.add(card_to_add)
+        test_deck.add_card(card_to_add)
         assert len(test_deck) == 53
         assert test_deck.deal() == Card("4", "♣")
 
     def test_adding_and_dealing_from_top_and_bottom(self):
         test_deck = Deck(["5"], ["♦"])
         assert len(test_deck) == 1
-        test_deck.add(Card("4", "♣"))
+        test_deck.add_card(Card("4", "♣"))
         assert len(test_deck) == 2
-        test_deck.add(Card("2", "♥"), to_bottom=True)
+        test_deck.add_card(Card("2", "♥"), to_bottom=True)
         assert len(test_deck) == 3
         assert test_deck.deal() == Card("4", "♣")
         assert test_deck.deal(from_bottom=True) == Card("2", "♥")
+
+    def test_adding_multiple_card_objects_using_method(self):
+        cards = [Card(v, s) for v, s in [("4", "♣"), ("2", "♥"), ("5", "♦")]]
+        three_cards = Deck([]).add_cards(cards)
+        print(Deck)
+        assert len(three_cards) == 3
+
+    def test_deck_iteration(self):
+        cards = [Card(v, s) for v, s in [("4", "♣"), ("2", "♥"), ("5", "♦")]]
+        print(cards)
+        three_cards = Deck(cards)
+        iterator = iter(three_cards)
+        assert next(iterator) == Card("5", "♦")
+        assert next(iterator) == Card("2", "♥")
+        assert next(iterator) == Card("4", "♣")
+        with pytest.raises(StopIteration):
+            next(iterator)
+
+    def test_adding_decks(self):
+        four_of_clubs = Deck().add_card(Card("4", "♣"))
+        two_of_hearts = Deck().add_card(Card("2", "♥"))
+        two_cards = four_of_clubs + two_of_hearts
+        assert len(two_cards) == 2
+        assert all(
+                [
+                    card in two_cards for card in [
+                        Card("4", "♣"),
+                        Card("2", "♥"),
+                    ]
+                ]
+            )
