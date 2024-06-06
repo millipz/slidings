@@ -5,6 +5,21 @@
   let gameState = null;
   let result = null;
 
+  const getRankIcon = (rank) => {
+    return "assets/" + rank.toString() + ".png";
+  };
+
+  const getSuitIcon = (suit) => {
+    const suitNames = {
+      1: "clubs",
+      2: "diamonds",
+      3: "hearts",
+      4: "spades"
+    }
+    let suitName = suitNames[suit]
+    return "assets/" + suitName + ".png";
+  };
+
   const startGame = async () => {
     const response = await fetch('http://localhost:8000/start', {
       method: 'POST',
@@ -54,14 +69,34 @@
   {#if !gameId}
     <p>Loading...</p>
   {:else}
-    <div>
-      <h2>Hand</h2>
-      <pre>{JSON.stringify(gameState["player_hand"])}</pre>
+  
+  <div>
+    <h2>Dealer's Hand</h2>
+    <div class="cards">
+      {#each gameState.dealer_hand as card}
+      {#if card === "Hidden" && !gameState.game_over}
+      <img src="assets/card_back.png" alt="Card Back" />
+      {:else}
+      <img src={getRankIcon(card.rank)} alt="Card" />
+      <img src={getSuitIcon(card.suit)} alt="Card" />
+      {/if}
+      {/each}
     </div>
+  </div>
+
+  <div>
+    <h2>Player's Hand</h2>
+    <div class="cards">
+      {#each gameState.player_hand as card}
+        <img src={getRankIcon(card.rank)} alt="Card" />
+        <img src={getSuitIcon(card.suit)} alt="Card" />
+      {/each}
+    </div>
+  </div>
 
     <div>
       <h2>Result</h2>
-      <p>{JSON.stringify(result)}</p>
+      <p>{result ? JSON.stringify(result.message) : "No result yet"}</p>
     </div>
 
     <div>
@@ -77,6 +112,20 @@
     max-width: 800px;
     margin: 0 auto;
     padding: 1rem;
+  }
+
+  .cards {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .cards img {
+    width: 100px;
+    height: 150px;
+    object-fit: contain;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
   }
 
   pre {
