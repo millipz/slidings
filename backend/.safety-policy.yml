@@ -1,0 +1,46 @@
+version: '3.0'
+
+scanning-settings:
+  max-depth: 6
+  exclude: []
+  include-files: []
+  system:
+    targets: []
+
+
+report:
+  dependency-vulnerabilities:
+    enabled: true
+    auto-ignore-in-report:
+      python:
+        environment-results: true
+        unpinned-requirements: true
+      cvss-severity: []
+
+
+fail-scan-with-exit-code:
+  dependency-vulnerabilities:
+    enabled: true
+    fail-on-any-of:
+      cvss-severity:
+        - medium
+        - critical
+        - high
+      exploitability:
+        - medium
+        - critical
+        - high
+
+security-updates:
+  dependency-vulnerabilities:
+    auto-security-updates-limit:
+      - patch
+
+security:
+    ignore-cvss-severity-below: 0
+    ignore-cvss-unknown-severity: False
+    ignore-vulnerabilities: 
+        70612:
+            reason: we will check for safety of strings used with jinja2 
+            expires: '2024-12-12'
+    continue-on-vulnerability-error: False
