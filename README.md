@@ -2,6 +2,14 @@
 
 This project is a learning exercise focused on building an interactive card game using Docker Compose, FastAPI for the backend, and Svelte for the frontend. The initial implementation is a simple MVP version of the Pontoon game, but the goal is to expand it to include multiplayer functionality and other goodies.
 
+<p align="center">
+  <br>
+  <img width="400" src="art/game-screenshot.png" alt="game screenshot">
+  <br>
+  <br>
+</p>
+
+
 ## Features
 
 - **Single Player Pontoon**: The current version allows users to play a basic game of Pontoon (a variation of Blackjack) against the computer.
