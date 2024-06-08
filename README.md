@@ -1,4 +1,4 @@
-# Interactive Card Game
+# Slidings Card Game
 
 This project is a learning exercise focused on building an interactive card game using Docker Compose, FastAPI for the backend, and Svelte for the frontend. The initial implementation is a simple MVP version of the Pontoon game, but the goal is to expand it to include multiplayer functionality and other goodies.
 
