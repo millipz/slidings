@@ -37,7 +37,7 @@ cd slidings
 3. Build and start the containers using Docker Compose:
 
 ```bash
-docker-compose up --build
+docker compose up --build
 ```
 
 This command will build the Docker images and start the containers for the backend and frontend services.
